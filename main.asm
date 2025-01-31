@@ -19,6 +19,8 @@ section .data
     lmsgErro equ $- msgErro
     msgDivZero db 10,'Erro: Divisão por zero!',0
     lmsgDivZero equ $- msgDivZero
+    msgSubNeg  db  10,'Erro: Subtração resulta em valor negativo!',0
+    lmsgSubNeg equ $- msgSubNeg
     nLinha   db 10,0
     lLinha   equ $ - nLinha
     result_msg db 10, 'Resultado: ', 0
@@ -156,12 +158,25 @@ subtrair:
     ; Converter num2 para inteiro
     mov rsi, num2
     call string_to_int
+
+    cmp rbx, rax          ; Comparar num1 com num2 (rbx - rax)
+    jl subtracao_negativa  ; Se num1 < num2, pular para subtracao_negativa
+
     sub rbx, rax        ; rbx = num1 - num2
 
     ; Exibir o resultado
     mov rax, rbx
     call int_to_string
     call mostrar_valor
+    jmp saida
+
+subtracao_negativa:
+    ; Exibir mensagem de erro de subtração negativa
+    mov rax, 1          ; sys_write
+    mov rdi, 1          ; stdout
+    mov rsi, msgSubNeg ; mensagem de erro
+    mov rdx, lmsgSubNeg ; tamanho da mensagem
+    syscall
     jmp saida
 
 multiplicar:

@@ -5,6 +5,7 @@ LD = ld
 LDFLAGS =
 TARGET = main
 OBJ = main.o
+LIB = convert.o
 
 # Regras
 
@@ -12,13 +13,18 @@ OBJ = main.o
 all: $(TARGET)
 
 # Regra para gerar o executável
-$(TARGET): $(OBJ)
-	$(LD) $(LDFLAGS) $(OBJ) -o $(TARGET)
+$(TARGET): $(OBJ) $(LIB)
+	$(LD) $(LDFLAGS) $(OBJ) $(LIB) -o $(TARGET)
+	chmod +x $(TARGET)
 
-# Regra para gerar o objeto
+# Regra para gerar o objeto principal
 $(OBJ): main.asm
 	$(ASM) $(ASMFLAGS) main.asm -o $(OBJ)
 
+# Regra para gerar o objeto da biblioteca
+$(LIB): main.asm
+	$(ASM) $(ASMFLAGS) convert.asm -o $(LIB)
+
 # Regra para limpar arquivos temporários
 clean:
-	rm -f $(OBJ) $(TARGET)
+	rm -f $(OBJ) $(TARGET) $(LIB)

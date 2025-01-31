@@ -34,6 +34,8 @@ section .bss
 
 section .text
     global _start
+    extern string_to_int
+    extern int_to_string
 
 _start:
     ; Exibir o título
@@ -144,6 +146,7 @@ adicionar:
     add rbx, rax        ; rbx = num1 + num2
 
     ; Exibir o resultado
+    mov rdi, result       ;endereço do buffer resultado
     mov rax, rbx
     call int_to_string
     call mostrar_valor
@@ -165,6 +168,7 @@ subtrair:
     sub rbx, rax        ; rbx = num1 - num2
 
     ; Exibir o resultado
+    mov rdi, result      ;endereço do buffer resultado
     mov rax, rbx
     call int_to_string
     call mostrar_valor
@@ -191,6 +195,7 @@ multiplicar:
     imul rbx, rax       ; rbx = num1 * num2
 
     ; Exibir o resultado
+    mov rdi, result      ;endereço do buffer resultado
     mov rax, rbx
     call int_to_string
     call mostrar_valor
@@ -217,6 +222,7 @@ dividir:
     mov rbx, rax        ; rbx = resultado da divisão
 
     ; Exibir o resultado
+    mov rdi, result      ;endereço do buffer resultado
     mov rax, rbx
     call int_to_string
     call mostrar_valor
@@ -243,40 +249,6 @@ saida:
     mov rax, 60         ; sys_exit
     xor rdi, rdi        ; código de saída 0
     syscall
-
-; Função para converter string para inteiro
-string_to_int:
-    xor rax, rax        ; Limpa rax
-    xor rcx, rcx        ; Limpa rcx
-.prox_digito:
-    movzx rdx, byte [rsi + rcx] ; Carrega o próximo dígito
-    cmp rdx, 0          ; Verifica se é o final da string
-    je .fim
-    cmp rdx, 10         ; Verifica se é uma nova linha
-    je .fim
-    sub rdx, '0'        ; Converte char para int
-    imul rax, 10        ; Multiplica o resultado atual por 10
-    add rax, rdx        ; Adiciona o dígito ao resultado
-    inc rcx             ; Avança para o próximo caractere
-    jmp .prox_digito
-.fim:
-    ret
-
-; Função para converter inteiro para string
-int_to_string:
-    lea rsi, [result + 9] ; Aponta para o final do buffer
-    mov byte [rsi], 0     ; Adiciona o terminador nulo
-    mov rbx, 10           ; Base 10
-.prox_digito:
-    dec rsi               ; Move para a próxima posição no buffer
-    xor rdx, rdx          ; Limpa rdx para a divisão
-    mov rcx, rbx          ; Move o divisor para rcx
-    div rcx               ; Divide rax por 10
-    add dl, '0'           ; Converte o resto para char
-    mov [rsi], dl         ; Armazena o caractere
-    test rax, rax         ; Verifica se rax == 0
-    jnz .prox_digito      ; Se não, continua
-    ret
 
 ; Função para exibir o valor
 mostrar_valor:

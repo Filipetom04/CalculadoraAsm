@@ -19,9 +19,9 @@ section .data
     lmsgOpc     equ $ - msgOpc
     msgErro     db  'Valor da opção invalida!!', 10, 0
     lmsgErro    equ $ - msgErro
-    msgDivZero  db  'Erro: Divisão por zero!', 10, 0
+    msgDivZero  db  'Erro: Divisão por zero! Tente novamente.', 10, 0
     lmsgDivZero equ $ - msgDivZero
-    msgSubNeg   db  'Erro: Subtração resulta em valor negativo!', 10, 0
+    msgSubNeg   db  'Erro: Subtração resulta em valor negativo! Tente novamente.', 10, 0
     lmsgSubNeg  equ $ - msgSubNeg
     result_msg  db  'Resultado: ', 0
     lresult_msg equ $ - result_msg
@@ -51,6 +51,7 @@ _start:
     mov rdx, ltitulo    ; tamanho da mensagem
     syscall
 
+.loop_principal:
     ; Solicitar Valor 1
     mov rax, 1          ; sys_write
     mov rdi, 1          ; stdout
@@ -146,7 +147,7 @@ _start:
     mov rsi, msgErro    ; mensagem de erro
     mov rdx, lmsgErro   ; tamanho da mensagem
     syscall
-    jmp saida
+    jmp .loop_principal
 
 .fazer_adicao:
     ; Converter num1 para inteiro
@@ -199,7 +200,7 @@ _start:
     mov rsi, msgSubNeg  ; mensagem de erro
     mov rdx, lmsgSubNeg ; tamanho da mensagem
     syscall
-    jmp saida
+    jmp .loop_principal ; Voltar ao início para nova entrada
 
 .fazer_multiplicacao:
     ; Converter num1 para inteiro
@@ -252,7 +253,7 @@ _start:
     mov rsi, msgDivZero ; mensagem de erro
     mov rdx, lmsgDivZero ; tamanho da mensagem
     syscall
-    jmp saida
+    jmp .loop_principal ; Voltar ao início para nova entrada
 
 saida:
     ; Nova linha

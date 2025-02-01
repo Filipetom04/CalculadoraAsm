@@ -1,36 +1,38 @@
 section .data
-    tit         db  10, '-----------------', 10, '| Calculadora |', 10, 0
-    ltit        equ $ - tit
-    obVal1      db  10, 'Valor 1:', 0
+    titulo      db  '---------------------', 10, ' | CALCULADORA |', 10, '---------------------', 10, 0
+    ltitulo     equ $ - titulo
+    obVal1      db  '- Primeiro Valor: ', 0
     lobVal1     equ $ - obVal1
-    obVal2      db  10, 'Valor 2:', 0
+    obVal2      db  '- Segundo Valor: ', 0
     lobVal2     equ $ - obVal2
-    opc1        db  10, '1. Adicionar', 0
+    opc1        db  '1 – Somar', 10, 0
     lopc1       equ $ - opc1
-    opc2        db  10, '2. Subtrair', 0
+    opc2        db  '2 – Subtrair', 10, 0
     lopc2       equ $ - opc2
-    opc3        db  10, '3. Multiplicar', 0
+    opc3        db  '3 – Multiplicar', 10, 0
     lopc3       equ $ - opc3
-    opc4        db  10, '4. Dividir', 0
+    opc4        db  '4 – Dividir', 10, 0
     lopc4       equ $ - opc4
-    msgOpc      db  10, 'Deseja Realizar?', 0
+    opc5        db  '5 – Sair', 10, 0
+    lopc5       equ $ - opc5
+    msgOpc      db  'Escolha uma opção: ', 0
     lmsgOpc     equ $ - msgOpc
-    msgErro     db  10, 'Valor da opção invalida!!', 0
+    msgErro     db  'Valor da opção invalida!!', 10, 0
     lmsgErro    equ $ - msgErro
-    msgDivZero  db  10, 'Erro: Divisão por zero!', 0
+    msgDivZero  db  'Erro: Divisão por zero!', 10, 0
     lmsgDivZero equ $ - msgDivZero
-    msgSubNeg   db  10, 'Erro: Subtração resulta em valor negativo!', 0
+    msgSubNeg   db  'Erro: Subtração resulta em valor negativo!', 10, 0
     lmsgSubNeg  equ $ - msgSubNeg
+    result_msg  db  'Resultado: ', 0
+    lresult_msg equ $ - result_msg
     nLinha      db  10, 0
     lLinha      equ $ - nLinha
-    result_msg  db  10, 'Resultado: ', 0
-    lresult_msg equ $ - result_msg
 
 section .bss
-    opc         resb 2
     num1        resb 10
     num2        resb 10
     result      resb 10
+    opc         resb 2
 
 section .text
     global _start
@@ -44,9 +46,9 @@ section .text
 _start:
     ; Exibir o título
     mov rax, 1          ; sys_write
-    mov rdi, 1          ; file descriptor (stdout)
-    mov rsi, tit        ; mensagem
-    mov rdx, ltit       ; tamanho da mensagem
+    mov rdi, 1          ; stdout
+    mov rsi, titulo     ; mensagem
+    mov rdx, ltitulo    ; tamanho da mensagem
     syscall
 
     ; Solicitar Valor 1
@@ -58,7 +60,7 @@ _start:
 
     ; Ler Valor 1
     mov rax, 0          ; sys_read
-    mov rdi, 0          ; file descriptor (stdin)
+    mov rdi, 0          ; stdin
     mov rsi, num1       ; buffer para armazenar a entrada
     mov rdx, 10         ; tamanho do buffer
     syscall
@@ -77,7 +79,7 @@ _start:
     mov rdx, 10         ; tamanho do buffer
     syscall
 
-    ; Exibir opções
+    ; Exibir o menu de opções
     mov rax, 1          ; sys_write
     mov rdi, 1          ; stdout
     mov rsi, opc1       ; mensagem
@@ -100,6 +102,12 @@ _start:
     mov rdi, 1          ; stdout
     mov rsi, opc4       ; mensagem
     mov rdx, lopc4      ; tamanho da mensagem
+    syscall
+
+    mov rax, 1          ; sys_write
+    mov rdi, 1          ; stdout
+    mov rsi, opc5       ; mensagem
+    mov rdx, lopc5      ; tamanho da mensagem
     syscall
 
     ; Solicitar a operação
@@ -129,6 +137,8 @@ _start:
     je .fazer_multiplicacao
     cmp rax, 4
     je .fazer_divisao
+    cmp rax, 5
+    je saida
 
     ; Se a operação for inválida, exibir mensagem de erro
     mov rax, 1          ; sys_write
@@ -280,10 +290,5 @@ mostrar_valor:
     jmp .contar_caracteres
 .fim_contagem:
     sub rdx, 1          ; retira 1 do tamanho do buffer para eliminar o caractere nulo
-    syscall
-    ret
-    jmp .contar_caracteres
-.fim_contagem:
-    sub rdx,1          ;retira 1 do tamanho do buffer para eliminar o caractere nulo
     syscall
     ret

@@ -1,0 +1,97 @@
+1. makefile
+O makefile é um arquivo de configuração usado para automatizar a compilação e o linking do projeto. Ele define regras para compilar os arquivos .asm em objetos .o e, em seguida, linkar esses objetos para gerar o executável final.
+
+Função principal:
+
+Compila os arquivos .asm usando o NASM.
+
+Linka os objetos gerados para criar o executável.
+
+Inclui regras para limpar arquivos temporários (clean) e compilar com símbolos de depuração (debug).
+
+Especificidades:
+
+Usa variáveis como ASM, ASMFLAGS, LD, LDFLAGS, etc., para facilitar a manutenção.
+
+Compila cada arquivo .asm separadamente e linka todos os objetos no final.
+
+2. convert.asm
+Este arquivo contém funções para converter strings em números inteiros e vice-versa. Ele é essencial para processar as entradas do usuário e exibir os resultados.
+
+Funções principais:
+
+string_to_int: Converte uma string (entrada do usuário) em um número inteiro.
+
+int_to_string: Converte um número inteiro em uma string para exibição.
+
+Especificidades:
+
+Usa operações de baixo nível (como sub e imul) para manipular caracteres e números.
+
+É modular e pode ser reutilizado em outros projetos que precisem de conversão de tipos.
+
+3. calcular.asm
+Este arquivo implementa as operações matemáticas básicas: adição, subtração, multiplicação e divisão.
+
+Funções principais:
+
+adicionar: Realiza a soma de dois números.
+
+subtrair: Realiza a subtração de dois números.
+
+multiplicar: Realiza a multiplicação de dois números.
+
+dividir: Realiza a divisão de dois números, com tratamento para divisão por zero.
+
+Especificidades:
+
+As funções são simples e diretas, usando instruções Assembly como add, sub, imul e idiv.
+
+A função dividir inclui uma verificação para evitar divisão por zero.
+
+4. main.asm
+Este é o arquivo principal do projeto, que controla o fluxo do programa. Ele interage com o usuário, chama as funções necessárias e exibe os resultados.
+
+Função principal:
+
+Exibe o menu de opções.
+
+Solicita os valores de entrada.
+
+Chama as funções de cálculo e exibe os resultados.
+
+Implementa um loop para permitir que o usuário insira novos valores em caso de erro.
+
+Especificidades:
+
+Usa chamadas de sistema (syscall) para interagir com o terminal (leitura e escrita).
+
+Integra as funções de convert.asm e calcular.asm para processar entradas e realizar cálculos.
+
+Inclui tratamento de erros para subtração negativa e divisão por zero.
+
+5. menu.asm
+Este arquivo é responsável por exibir o menu de opções e obter a escolha do usuário. Ele foi criado para modularizar o código e separar a lógica de exibição do menu.
+
+Funções principais:
+
+exibir_menu: Exibe o menu de opções (somar, subtrair, multiplicar, dividir, sair).
+
+obter_opcao: Lê a escolha do usuário e a retorna como um número.
+
+Especificidades:
+
+Modulariza a exibição do menu, facilitando a manutenção e reutilização.
+
+Usa chamadas de sistema para exibir strings e ler a entrada do usuário.
+
+Resumo Geral:
+makefile: Automatiza a compilação e o linking do projeto.
+
+convert.asm: Responsável pela conversão de strings para números e vice-versa.
+
+calcular.asm: Implementa as operações matemáticas básicas.
+
+main.asm: Controla o fluxo do programa, interage com o usuário e integra todas as funcionalidades.
+
+menu.asm: Exibe o menu de opções e obtém a escolha do usuário.

@@ -5,7 +5,7 @@ LD = ld
 LDFLAGS =
 TARGET = main
 OBJ = main.o
-LIBS = convert.o calcular.o
+LIBS = convert.o calcular.o menu.o
 
 # Regras
 
@@ -33,6 +33,11 @@ convert.o: convert.asm
 calcular.o: calcular.asm
 	@echo "Compilando calcular.asm..."
 	$(ASM) $(ASMFLAGS) calcular.asm -o calcular.o
+
+# Regra para gerar o objeto da biblioteca menu
+menu.o: menu.asm
+	@echo "Compilando menu.asm..."
+	$(ASM) $(ASMFLAGS) menu.asm -o menu.o
 
 # Regra para executar o programa
 run: $(TARGET)
